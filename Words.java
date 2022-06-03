@@ -33,8 +33,10 @@ public class Words extends JFrame implements ActionListener {
     private JPanel panel, wordsPanel;
     // private JPanel controlPanel;
     private boolean[] used = new boolean[16];
+    HashMap<Integer, String> grid = new HashMap<Integer, String>();
     private int choosen;
-    private ArrayList<String> grid = new ArrayList<>();
+    //private ArrayList<String> grid = new ArrayList<String>();
+    private String[] words = {"fold", "sad", "show", "oven", "snow", "mine", "rain", "math", "mug", "toss", "ride", "jaw", "pool", "skip"};
 
     public Words() {
         // = new JFrame("Brain Games") {
@@ -73,58 +75,74 @@ public class Words extends JFrame implements ActionListener {
         back.setFocusable(false);
         back.setBounds(25, 15, 80, 30);
 
-        // Random r1 = new Random();
-        // char randomizedCharacter1 = (char) (r1.nextInt(26) + 'a');
-        // char rand = 'a' + 5;
-        // System.out.println("first rand - "  + rand);
-        // System.out.println("random char- " + randomizedCharacter1);
+        ArrayList<String> usedWords = new ArrayList<String>();
+        while(grid.keySet().size() < 16){
+            int randWordInd = (int)(Math.random() * words.length);
+            String word = words[randWordInd];
 
-        // Random randlala = new Random();
-        // char c = (char)(randlala.nextInt(26) + 'a');
-        // System.out.println("second rand -" + c);
-        // // char c = 'A';
-
-        for (int i = 0; i < 16; i++) {
-            int rand = (int) (Math.random() * 27);
-            System.out.println(rand);
-            String letter = Character.toString('A' + rand);
-            System.out.println(letter);
-
-            System.out.println(grid.toString());
-            while(grid.contains(letter)){
-                rand = (int) (Math.random() * 26);
-                letter = Character.toString('A' + rand);
+            if(!(usedWords.contains(word))){
+                usedWords.add(word);
             }
-
-            grid.add(letter);
-            buttons[i] = new JButton(letter);
-            buttons[i].addActionListener((ActionListener) this);
-            buttons[i].setFont(myFont);
-            buttons[i].setFocusable(false);
-
-            // System.out.println("rand char = " + randChar);
-            // //System.out.println("random char- " + randomizedCharacter);
-            // String letter = Character.toString(randChar);
-            // //System.out.println(letter);
-            // //System.out.println(grid.toString());
-            // // while (grid.contains(letter)) {
-            // // letter = Character.toString((r.nextInt(26) + 'A'));
-            // // System.out.println("work");
-            // // }
-            // grid.add(letter);
-            
-
+            horizontalOrient(word);
+            int randOrientation = (int)(Math.random() * 3);
+            // if(randOrientation == 0){
+            //     horizontalOrient(word);
+            // }else if(randOrientation == 1){
+            //     verticalOrient(word);
+            // }else{
+            //     diagonalOrient(word);
+            // }
         }
+
+        
+
+        // for (int i = 0; i < 16; i++) {
+        //     int randWordInd = (int)(Math.random() * words.length);
+        //     String word = words[randWordInd];
+
+
+
+        //     String word = "";
+        //     //choose random starting position on the grid
+        //     int randStart = (int)(Math.random() * 16);
+        //     System.out.println("rand int - " + randStart);
+        //     //if the grid doesn't already have a letter at that position,
+        //     if(!(grid.keySet().contains(randStart))){
+        //         int randWordInd = (int)(Math.random() * words.length);
+        //         word = words[randWordInd];
+        //         // if(word.equals(grid.get(randWordInd))){
+        //         //     word = words[randWordInd];
+        //         // }
+        //         while(grid.values().contains(word)){
+        //             randWordInd = (int)(Math.random() * words.length);
+        //             word = words[randWordInd];
+        //         }
+        //         int randOrientation = (int)(Math.random() * 3);
+        //         if(randOrientation == 0){
+        //             horizontalOrient();
+        //         }else if(randOrientation == 1){
+        //             verticalOrient();
+        //         }else{
+        //             diagonalOrient();
+        //         }
+        //         System.out.println(grid);
+
+        //         grid.put(randStart, word);
+        //         buttons[i] = new JButton(word);
+        //         buttons[i].addActionListener((ActionListener) this);
+        //         buttons[i].setFont(myFont);
+        //         buttons[i].setFocusable(false);
+        //     }
+            
+   
+        // }
 
         panel = new JPanel();
         panel.setBounds(125, 170, 400, 400);
         panel.setLayout(new GridLayout(4, 4, 3, 3));
-        for (int j = 0; j < buttons.length; j++) {
+        for (int j = 0; j < buttons.length; j++) { 
             panel.add(buttons[j]);
         }
-
-        // wordsPanel = new JPanel();
-        // wordsPanel.setBounds(200, 500, 100, 100);
 
         add(panel);
         add(title);
@@ -141,6 +159,45 @@ public class Words extends JFrame implements ActionListener {
         g.fillRect(80, 620, 500, 125);
 
     }
+
+   public void createGrid(){
+       int start = (int) (Math.random() * 16);
+
+   }
+
+   public void horizontalOrient(String word){
+        boolean reverse = false;
+        int rand = (int)(Math.random() * 2);
+        if(rand == 0){
+            reverse = true;
+        }
+        int randRow = (int)(Math.random() * 4) + 1;
+        int max = 4 * randRow - 1;
+        int min = 4 * (randRow - 1);
+        if(!reverse){
+            int strInd = 0;
+            for(int i = min; i <= max; i++){
+                buttons[i] = new JButton(word.substring(strInd, strInd + 1));
+                buttons[i].addActionListener((ActionListener) this);
+                buttons[i].setFont(myFont);
+                buttons[i].setFocusable(false);
+                strInd++;
+            }
+        }else{
+            int strInd = word.length() - 1;
+            for(int i = min; i <= max; i++){
+                buttons[i] = new JButton(word.substring(strInd, strInd + 1));
+                buttons[i].addActionListener((ActionListener) this);
+                buttons[i].setFont(myFont);
+                buttons[i].setFocusable(false);
+                strInd--;
+            }
+        }
+   }
+
+   public void verticalOrient(String word){}
+
+   public void diagonalOrient(String word){}
 
     // public void paintComponent(Graphics g){
     // paintComponents(g);

@@ -36,7 +36,7 @@ public class Words extends JFrame implements ActionListener {
     HashMap<Integer, String> grid = new HashMap<Integer, String>();
     private int choosen;
     //private ArrayList<String> grid = new ArrayList<String>();
-    private String[] words = {"fold", "sad", "show", "oven", "snow", "mine", "rain", "math", "mug", "toss", "ride", "jaw", "pool", "skip"};
+    private String[] words = {"fold", "sad", "show", "oven", "snow", "mine", "rain", "math", "mug", "toss", "ride", "jem", "pool", "skip"};
 
     public Words() {
         // = new JFrame("Brain Games") {
@@ -76,13 +76,23 @@ public class Words extends JFrame implements ActionListener {
         back.setBounds(25, 15, 80, 30);
 
         ArrayList<String> usedWords = new ArrayList<String>();
+        // for(Integer i: grid.keySet()){
+        //     System.out.println("key - " + i);
+        //     System.out.println("value -" + grid.get(i));
+        // }
+        System.out.println(grid.keySet().size());
+        grid.put(1,"stipid");
+        System.out.println(grid.keySet().size());
         while(grid.keySet().size() < 16){
+            System.out.println("keysize -" + grid.keySet().size());
             int randWordInd = (int)(Math.random() * words.length);
             String word = words[randWordInd];
 
             if(!(usedWords.contains(word))){
                 usedWords.add(word);
             }
+            grid.put(randWordInd, word);
+            System.out.println("grid size- " + grid.keySet().size());
             horizontalOrient(word);
             int randOrientation = (int)(Math.random() * 3);
             // if(randOrientation == 0){
@@ -172,11 +182,15 @@ public class Words extends JFrame implements ActionListener {
             reverse = true;
         }
         int randRow = (int)(Math.random() * 4) + 1;
+        //System.out.println("row - " + randRow);
         int max = 4 * randRow - 1;
         int min = 4 * (randRow - 1);
+        //System.out.println("min - " + min);
+        //System.out.println("max - " + max);
         if(!reverse){
             int strInd = 0;
-            for(int i = min; i <= max; i++){
+            
+            for(int i = min; i < (min + word.length()); i++){
                 buttons[i] = new JButton(word.substring(strInd, strInd + 1));
                 buttons[i].addActionListener((ActionListener) this);
                 buttons[i].setFont(myFont);
@@ -185,7 +199,11 @@ public class Words extends JFrame implements ActionListener {
             }
         }else{
             int strInd = word.length() - 1;
-            for(int i = min; i <= max; i++){
+            System.out.println("word -" + word);
+            System.out.println("min - " + min);
+            for(int i = min; i < (min + word.length()); i++){
+                //System.out.println("str ind- " + strInd);
+                System.out.println(i);
                 buttons[i] = new JButton(word.substring(strInd, strInd + 1));
                 buttons[i].addActionListener((ActionListener) this);
                 buttons[i].setFont(myFont);
@@ -193,6 +211,7 @@ public class Words extends JFrame implements ActionListener {
                 strInd--;
             }
         }
+        
    }
 
    public void verticalOrient(String word){}

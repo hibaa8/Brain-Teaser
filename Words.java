@@ -173,6 +173,10 @@ public class Words extends JFrame implements ActionListener {
             hours = (elapsedTime / 3600000);
             minutes = (elapsedTime / 60000) % 60;
             seconds = (elapsedTime / 1000) % 60;
+            if (minutes == 2) {
+                timer.stop();
+                endScreen();
+            }
             seconds_string = String.format("%02d", seconds);
             minutes_string = String.format("%02d", minutes);
             hours_string = String.format("%02d", hours);
@@ -558,8 +562,10 @@ public class Words extends JFrame implements ActionListener {
     }
 
     public void endScreen() {
+
         dispose();
         JFrame frame2 = new JFrame();
+        // JFrame frame2 = new JFrame();
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame2.setSize(500, 550);
         frame2.setLayout(null);
@@ -568,25 +574,25 @@ public class Words extends JFrame implements ActionListener {
 
         JLabel title2 = new JLabel("Game Over");
         title2.setFont(titleFont);
-        title2.setBounds(80, 25, 500, 100);
+        title2.setBounds(120, 25, 500, 100);
         title2.setForeground(Color.red);
 
-        if (checkLose()) {
-            JLabel outOfTime = new JLabel("(Ran out of time)");
-            title2.setFont(titleFont);
-            title2.setBounds(350, 25, 500, 100);
-        }
+        // if (checkLose()) {
+        // JLabel outOfTime = new JLabel("(Ran out of time)");
+        // outOfTime.setFont(myFont);
+        // outOfTime.setBounds(350, 25, 500, 100);
+        // }
 
         JLabel scorelbl2 = new JLabel("Score: " + String.valueOf(score));
         scorelbl2.setFont(myFont);
-        scorelbl2.setBounds(80, 100, 500, 100);
+        scorelbl2.setBounds(160, 100, 500, 100);
 
         seconds_string = String.format("%02d", tltSecs);
         minutes_string = String.format("%02d", ttlMins);
         hours_string = String.format("%02d", ttlHrs);
         JLabel timeLabel2 = new JLabel("Time: " + hours_string + ":" + minutes_string + ":" + seconds_string);
         timeLabel2.setFont(myFont);
-        timeLabel2.setBounds(80, 175, 500, 100);
+        timeLabel2.setBounds(140, 175, 500, 100);
 
         int totalTime = (ttlHrs * 3600) + (ttlMins * 60) + tltSecs;
         double vel = (double) totalTime / score;
@@ -615,7 +621,7 @@ public class Words extends JFrame implements ActionListener {
         // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
         back2.setFont(myFont);
         back2.setFocusable(false);
-        back2.setBounds(175, 400, 100, 50);
+        back2.setBounds(165, 400, 100, 50);
 
         frame2.add(title2);
         frame2.add(scorelbl2);

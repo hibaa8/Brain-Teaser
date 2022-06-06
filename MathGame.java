@@ -188,6 +188,24 @@ public class MathGame implements ActionListener, KeyListener {
             elapsedTime = elapsedTime + 1000;
             hours = (elapsedTime / 3600000);
             minutes = (elapsedTime / 60000) % 60;
+            if (seconds == 30) {
+                timer.stop();
+                question++;
+                System.out.println(textfield.getText());
+                System.out.println("Question: " + question);
+                System.out.println("correct answer = " + questions.get(questionlbl.getText()));
+                System.out.println("inputted answer = " + textfield.getText());
+
+                if (questions.get(questionlbl.getText()) == Integer.valueOf(textfield.getText())) {
+                    score++;
+                }
+                System.out.println("Score: " + score);
+                if (question <= 9) {
+                    newQuestion();
+                } else {
+                    endScreen();
+                }
+            }
             seconds = (elapsedTime / 1000) % 60;
             seconds_string = String.format("%02d", seconds);
             minutes_string = String.format("%02d", minutes);
@@ -248,29 +266,36 @@ public class MathGame implements ActionListener, KeyListener {
     }
 
     public void endScreen() {
+        JFrame frame2 = new JFrame();
         frame.dispose();
-        frame2 = new JFrame();
+        // JFrame frame2 = new JFrame();
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setSize(500, 600);
+        frame2.setSize(500, 550);
         frame2.setLayout(null);
         frame2.setForeground(Color.white);
         frame2.setTitle("Brain Games");
 
         JLabel title2 = new JLabel("Game Over");
         title2.setFont(titleFont);
-        title2.setBounds(100, 25, 500, 100);
+        title2.setBounds(120, 25, 500, 100);
         title2.setForeground(Color.red);
+
+        // if (checkLose()) {
+        // JLabel outOfTime = new JLabel("(Ran out of time)");
+        // outOfTime.setFont(myFont);
+        // outOfTime.setBounds(350, 25, 500, 100);
+        // }
 
         JLabel scorelbl2 = new JLabel("Score: " + String.valueOf(score));
         scorelbl2.setFont(myFont);
-        scorelbl2.setBounds(100, 100, 500, 100);
+        scorelbl2.setBounds(160, 100, 500, 100);
 
         seconds_string = String.format("%02d", tltSecs);
         minutes_string = String.format("%02d", ttlMins);
         hours_string = String.format("%02d", ttlHrs);
         JLabel timeLabel2 = new JLabel("Time: " + hours_string + ":" + minutes_string + ":" + seconds_string);
         timeLabel2.setFont(myFont);
-        timeLabel2.setBounds(100, 175, 500, 100);
+        timeLabel2.setBounds(140, 175, 500, 100);
 
         int totalTime = (ttlHrs * 3600) + (ttlMins * 60) + tltSecs;
         double vel = (double) totalTime / score;
@@ -279,7 +304,7 @@ public class MathGame implements ActionListener, KeyListener {
 
         JLabel velLbl = new JLabel("Rate: " + String.valueOf(vel) + " \nsecs/correct answer");
         velLbl.setFont(new Font("Ink Free", Font.BOLD, 22));
-        velLbl.setBounds(100, 250, 500, 100);
+        velLbl.setBounds(80, 250, 500, 80);
 
         if (vel > bestVel) {
             bestVel = vel;
@@ -292,14 +317,14 @@ public class MathGame implements ActionListener, KeyListener {
 
         JLabel bestVelLbl = new JLabel("Best Rate: " + String.valueOf(bestVel) + " \nsecs/correct answer");
         bestVelLbl.setFont(new Font("Ink Free", Font.BOLD, 22));
-        bestVelLbl.setBounds(100, 325, 500, 100);
+        bestVelLbl.setBounds(80, 300, 500, 100);
 
         back2 = new JButton("Back");
         back2.addActionListener(this);
-        Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
-        back2.setFont(tinyFont);
+        // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
+        back2.setFont(myFont);
         back2.setFocusable(false);
-        back2.setBounds(150, 450, 80, 30);
+        back2.setBounds(165, 400, 100, 50);
 
         frame2.add(title2);
         frame2.add(scorelbl2);

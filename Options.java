@@ -70,7 +70,7 @@ public class Options implements ActionListener {
 
         if (e.getSource() == memory) {
             frame.dispose();
-            Gui gui = new Gui();
+            Memory memory = new Memory();
         }
 
         if (e.getSource() == words) {

@@ -91,7 +91,7 @@ public class Words extends JFrame implements ActionListener {
             }
         }
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             int randInd = (int) (Math.random() * words.size());
             String randWord = words.get(randInd);
             while (usedWords.contains(randWord)) {
@@ -139,11 +139,11 @@ public class Words extends JFrame implements ActionListener {
         }
 
         buttonsPanel = new JPanel();
-        buttonsPanel.setBounds(80, 150, 500, 450);
+        buttonsPanel.setBounds(80, 160, 500, 450);
         buttonsPanel.setLayout(new GridLayout(8, 8, 3, 3));
 
         wordsPanel = new JPanel();
-        wordsPanel.setBounds(80, 620, 500, 125);
+        wordsPanel.setBounds(80, 625, 500, 125);
         wordsPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
         wordsPanel.setLayout(new GridLayout(2, 4, 5, 5));
         wordsPanel.setBackground(Color.white);
@@ -562,9 +562,8 @@ public class Words extends JFrame implements ActionListener {
     }
 
     public void endScreen() {
-
-        dispose();
         JFrame frame2 = new JFrame();
+        dispose();
         // JFrame frame2 = new JFrame();
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame2.setSize(500, 550);
@@ -574,7 +573,7 @@ public class Words extends JFrame implements ActionListener {
 
         JLabel title2 = new JLabel("Game Over");
         title2.setFont(titleFont);
-        title2.setBounds(120, 25, 500, 100);
+        title2.setBounds(135, 25, 500, 100);
         title2.setForeground(Color.red);
 
         // if (checkLose()) {
@@ -585,7 +584,7 @@ public class Words extends JFrame implements ActionListener {
 
         JLabel scorelbl2 = new JLabel("Score: " + String.valueOf(score));
         scorelbl2.setFont(myFont);
-        scorelbl2.setBounds(160, 100, 500, 100);
+        scorelbl2.setBounds(175, 100, 500, 100);
 
         seconds_string = String.format("%02d", tltSecs);
         minutes_string = String.format("%02d", ttlMins);
@@ -621,7 +620,7 @@ public class Words extends JFrame implements ActionListener {
         // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
         back2.setFont(myFont);
         back2.setFocusable(false);
-        back2.setBounds(165, 400, 100, 50);
+        back2.setBounds(180, 400, 100, 50);
 
         frame2.add(title2);
         frame2.add(scorelbl2);

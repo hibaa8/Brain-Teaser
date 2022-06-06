@@ -186,12 +186,12 @@ public class Memory implements ActionListener {
     public void initControlPanel() {
         title = new JLabel("Card Matching Game");
         title.setFont(titleFont);
-        title.setBounds(120, 100, 500, 75);
+        title.setBounds(105, 100, 500, 75);
         title.setForeground(Color.red);
 
         scorelbl = new JLabel("Score: " + String.valueOf(score));
         scorelbl.setFont(myFont);
-        scorelbl.setBounds(275, 5, 500, 75);
+        scorelbl.setBounds(270, 5, 500, 75);
 
         back = new JButton("Back");
         back.addActionListener(this);
@@ -315,7 +315,7 @@ public class Memory implements ActionListener {
 
         JLabel title2 = new JLabel("Game Over");
         title2.setFont(titleFont);
-        title2.setBounds(120, 25, 500, 100);
+        title2.setBounds(135, 25, 500, 100);
         title2.setForeground(Color.red);
 
         // if (checkLose()) {
@@ -326,7 +326,7 @@ public class Memory implements ActionListener {
 
         JLabel scorelbl2 = new JLabel("Score: " + String.valueOf(score));
         scorelbl2.setFont(myFont);
-        scorelbl2.setBounds(160, 100, 500, 100);
+        scorelbl2.setBounds(175, 100, 500, 100);
 
         seconds_string = String.format("%02d", tltSecs);
         minutes_string = String.format("%02d", ttlMins);
@@ -362,7 +362,7 @@ public class Memory implements ActionListener {
         // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
         back2.setFont(myFont);
         back2.setFocusable(false);
-        back2.setBounds(165, 400, 100, 50);
+        back2.setBounds(180, 400, 100, 50);
 
         frame2.add(title2);
         frame2.add(scorelbl2);

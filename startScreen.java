@@ -20,7 +20,7 @@ public class startScreen implements ActionListener {
         title = new JLabel("Brain Games");
         Font titleFont = new Font("Ink Free", Font.BOLD, 50);
         title.setFont(titleFont);
-        title.setBounds(125, 50, 300, 75);
+        title.setBounds(125, 50, 400, 75);
         title.setForeground(Color.red);
 
         // image = new JLabel(new ImageIcon("start_screen (1).jpg"));

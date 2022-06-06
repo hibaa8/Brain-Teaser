@@ -56,7 +56,7 @@ public class MathGame implements ActionListener, KeyListener {
         frame.requestFocusInWindow();
 
         title = new JLabel("Long addition/subtraction");
-        title.setFont(titleFont);
+        title.setFont(new Font("Ink Free", Font.BOLD, 35));
         title.setBounds(90, 70, 500, 125);
         title.setForeground(Color.red);
 
@@ -99,7 +99,7 @@ public class MathGame implements ActionListener, KeyListener {
 
         scorelbl = new JLabel("Score: " + score);
         scorelbl.setFont(myFont);
-        scorelbl.setBounds(320, 15, 200, 75);
+        scorelbl.setBounds(330, 15, 200, 75);
 
         timeLabel.setText(hours_string + ":" + minutes_string + ":" + seconds_string);
         timeLabel.setFont(myFont);
@@ -277,7 +277,7 @@ public class MathGame implements ActionListener, KeyListener {
 
         JLabel title2 = new JLabel("Game Over");
         title2.setFont(titleFont);
-        title2.setBounds(120, 25, 500, 100);
+        title2.setBounds(135, 25, 500, 100);
         title2.setForeground(Color.red);
 
         // if (checkLose()) {
@@ -288,7 +288,7 @@ public class MathGame implements ActionListener, KeyListener {
 
         JLabel scorelbl2 = new JLabel("Score: " + String.valueOf(score));
         scorelbl2.setFont(myFont);
-        scorelbl2.setBounds(160, 100, 500, 100);
+        scorelbl2.setBounds(175, 100, 500, 100);
 
         seconds_string = String.format("%02d", tltSecs);
         minutes_string = String.format("%02d", ttlMins);
@@ -324,7 +324,7 @@ public class MathGame implements ActionListener, KeyListener {
         // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
         back2.setFont(myFont);
         back2.setFocusable(false);
-        back2.setBounds(165, 400, 100, 50);
+        back2.setBounds(180, 400, 100, 50);
 
         frame2.add(title2);
         frame2.add(scorelbl2);

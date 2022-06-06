@@ -332,7 +332,7 @@ public class Gui implements ActionListener {
         frame.dispose();
         JFrame frame2 = new JFrame();
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setSize(500, 600);
+        frame2.setSize(500, 550);
         frame2.setLayout(null);
         frame2.setForeground(Color.white);
         frame2.setTitle("Brain Games");
@@ -379,14 +379,14 @@ public class Gui implements ActionListener {
 
         JLabel bestVelLbl = new JLabel("Best Rate: " + String.valueOf(bestVel) + " \nsecs/correct answer");
         bestVelLbl.setFont(new Font("Ink Free", Font.BOLD, 22));
-        bestVelLbl.setBounds(100, 300, 500, 100);
+        bestVelLbl.setBounds(80, 300, 500, 100);
 
         back2 = new JButton("Back");
         back2.addActionListener(this);
         // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
         back2.setFont(myFont);
         back2.setFocusable(false);
-        back2.setBounds(175, 4, 100, 50);
+        back2.setBounds(175, 400, 100, 50);
 
         frame2.add(title2);
         frame2.add(scorelbl2);

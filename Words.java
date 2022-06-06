@@ -1,16 +1,20 @@
 import javax.imageio.ImageIO;
 import javax.security.auth.kerberos.KerberosCredMessage;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Math;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.Random;
 
 public class Words extends JFrame implements ActionListener {
     // private JFrame
@@ -31,7 +35,7 @@ public class Words extends JFrame implements ActionListener {
     private Font titleFont = new Font("Ink Free", Font.BOLD, 40);
     private Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
     boolean clicked = false;
-    private JPanel panel, wordsPanel;
+    private JPanel buttonsPanel, wordsPanel;
     // private JPanel controlPanel;
     private boolean[] used = new boolean[16];
     HashMap<Integer, String> grid = new HashMap<Integer, String>();
@@ -39,15 +43,25 @@ public class Words extends JFrame implements ActionListener {
     private int choosen;
     // private ArrayList<String> grid = new ArrayList<String>();
     private ArrayList<String> usedWords = new ArrayList<String>();
-    private String[] words = { "fold", "sad", "show", "oven", "snow", "mine", "rain", "math", "mug", "toss", "ride",
-            "jem", "pool", "skip" };
+    private String[] w = { "school", "happy", "science", "math", "history", "book", "mail", "game", "golf", "soccer",
+            "pool", "beach", "summer", "flower", "fire", "vacation", "june", "free", "party", "movie", "show", "hike",
+            "bicycle", "eat", "money", "forest", "monkey", "dog", "cat", "bear", "fish", "computer", "sea", "water",
+            "story", "farmer", "city", "year", "art", "writer", "power", "apple",
+            "orange", "music", "bird", "meal", "poetry", "law", "device", "idea", "balloon", "cake", "airport", "pizza",
+            "piano", "rain", "horse", "bed", "cartoon",
+            "shoe", "crayon", "lamp", "truck", "dream", "market", "van", "whale", "energy", "football", "glass", "oil"
+    };
+    private ArrayList<String> words = new ArrayList<String>(Arrays.asList(w));
+
     private boolean[] rows = new boolean[8];
     private boolean[] cols = new boolean[8];
-    private boolean[] diagonals = new boolean[4];
+    private boolean[] diagonalsInd = new boolean[4];
+    private ArrayList<ArrayList<String>> diagonals = new ArrayList<ArrayList<String>>();
+    private String word = "";
 
     public Words() {
 
-        setTitle("Brian Games");
+        setTitle("Brain Games");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(650, 800);
         setLayout(null);
@@ -77,36 +91,19 @@ public class Words extends JFrame implements ActionListener {
             }
         }
 
-        // for (int j = 0; j < buttons.length; j++) {
-        // buttons[j] = new JButton("1");
-        // buttons[j].addActionListener((ActionListener) this);
-        // buttons[j].setFont(myFont);
-        // buttons[j].setFocusable(false);
-        // }
-
-        // 1) Pick a random word from words list
-        // 2) choose a way to orient the letters on the buttons - horizontal, vertical,
-        // or diagonal
-        // 3) make the letters appear on the buttons in that manner
-        // 4) Add the word to the used words list
-        // 5) choose 5 words in total to appear on the board
-        // 6) create a hashmap where the key is the index of the button and the value is
-        // the letter it corresponds to.
-        // 7) the hashmap will be used to create words which will then be matched to the
-        // words in the usedWords array
-
-        for (int i = 0; i < 4; i++) {
-            int randInd = (int) (Math.random() * words.length);
-            String randWord = words[randInd];
+        for (int i = 0; i < 5; i++) {
+            int randInd = (int) (Math.random() * words.size());
+            String randWord = words.get(randInd);
             while (usedWords.contains(randWord)) {
-                randInd = (int) (Math.random() * words.length);
-                randWord = words[randInd];
+                randInd = (int) (Math.random() * words.size());
+                randWord = words.get(randInd);
             }
+            System.out.println("random word: " + randWord);
             usedWords.add(randWord);
-
+            System.out.println("used words: " + usedWords);
             // int randOrientation = (int) Math.random() * 3;
 
-            int randOrientation = (int) (Math.random() * 2);
+            int randOrientation = (int) (Math.random() * 3);
             // int randOrientation = 1;
             if (randOrientation == 0) {
                 horizontalOrient(randWord);
@@ -118,9 +115,21 @@ public class Words extends JFrame implements ActionListener {
         }
         // System.out.println(buttons);
 
+        for (int i = 0; i < grid2.length; i++) {
+            for (int j = 0; j < grid2[0].length; j++) {
+                if (grid2[i][j].equals("1")) {
+                    Random r = new Random();
+                    char c = (char) (r.nextInt(26) + 'a');
+                    String letter = Character.toString(c);
+                    grid2[i][j] = letter;
+                }
+            }
+        }
+
         int buttonInd = 0;
         for (int i = 0; i < grid2.length; i++) {
             for (int j = 0; j < grid2[0].length; j++) {
+
                 buttons[buttonInd] = new JButton(grid2[i][j]);
                 buttons[buttonInd].addActionListener((ActionListener) this);
                 buttons[buttonInd].setFont(myFont);
@@ -129,19 +138,28 @@ public class Words extends JFrame implements ActionListener {
             }
         }
 
-        panel = new JPanel();
-        panel.setBounds(80, 150, 500, 450);
-        panel.setLayout(new GridLayout(8, 8, 3, 3));
+        buttonsPanel = new JPanel();
+        buttonsPanel.setBounds(80, 150, 500, 450);
+        buttonsPanel.setLayout(new GridLayout(8, 8, 3, 3));
+
+        wordsPanel = new JPanel();
+        wordsPanel.setBounds(80, 620, 500, 125);
+        wordsPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
+        wordsPanel.setLayout(new GridLayout(2, 4, 5, 5));
+        wordsPanel.setBackground(Color.white);
 
         System.out.println("\nbuttons array");
         for (JButton button : buttons) {
             System.out.println(button);
         }
         for (int j = 0; j < buttons.length; j++) {
-            panel.add(buttons[j]);
+            buttonsPanel.add(buttons[j]);
         }
 
-        add(panel);
+        timer.start();
+
+        add(buttonsPanel);
+        add(wordsPanel);
         add(title);
         add(scorelbl);
         add(timeLabel);
@@ -149,13 +167,20 @@ public class Words extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public void horizontalOrient(String word) {
-        System.out.println("horizontal orientation");
-        int rand = (int) (Math.random() * 2);
-        System.out.println("rand int - " + rand);
-        boolean reverse = rand == 0;
-        System.out.println("reverse: " + reverse);
+    Timer timer = new Timer(1000, new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            elapsedTime = elapsedTime + 1000;
+            hours = (elapsedTime / 3600000);
+            minutes = (elapsedTime / 60000) % 60;
+            seconds = (elapsedTime / 1000) % 60;
+            seconds_string = String.format("%02d", seconds);
+            minutes_string = String.format("%02d", minutes);
+            hours_string = String.format("%02d", hours);
+            timeLabel.setText(hours_string + ":" + minutes_string + ":" + seconds_string);
+        }
+    });
 
+    public int chooseRow() {
         int row = (int) (Math.random() * 8);
         System.out.println("\nrow: " + row);
         System.out.println("\nrows array: ");
@@ -166,6 +191,58 @@ public class Words extends JFrame implements ActionListener {
             row = (int) (Math.random() * 8);
             System.out.println("new row: " + row);
         }
+        return row;
+    }
+
+    public int checkRow(String word, int startInd, int endInd, int wordInd, int row, boolean reverse) {
+        boolean rowWorks = true;
+        if (!reverse) {
+            for (int i = startInd; i <= endInd; i++) {
+                System.out.println("checking row");
+                String letter = word.substring(wordInd, wordInd + 1);
+                System.out.println("letter at index: " + grid2[row][i]);
+                System.out.println("Word index: " + wordInd);
+                System.out.println("letter: " + letter);
+                if (grid2[row][i].equals("1") || grid2[row][i].equals(letter)) {
+                    wordInd++;
+                } else {
+                    rowWorks = false;
+                }
+                System.out.println("colWorks: " + rowWorks);
+            }
+        } else {
+            for (int i = endInd; i >= startInd; i--) {
+                System.out.println("checking row");
+                String letter = word.substring(wordInd, wordInd + 1);
+                System.out.println("letter at index: " + grid2[row][i]);
+                System.out.println("Word index: " + wordInd);
+                System.out.println("letter: " + letter);
+                if (grid2[row][i].equals("1") || grid2[row][i].equals(letter)) {
+                    wordInd++;
+                } else {
+                    rowWorks = false;
+                }
+                System.out.println("colWorks: " + rowWorks);
+            }
+        }
+        while (!rowWorks) {
+            row = chooseRow();
+            wordInd = 0;
+            rowWorks = true;
+            row = checkRow(word, startInd, endInd, wordInd, row, reverse);
+        }
+        return row;
+    }
+
+    public void horizontalOrient(String word) {
+        System.out.println("horizontal orientation");
+        int rand = (int) (Math.random() * 2);
+        System.out.println("rand int - " + rand);
+        boolean reverse = rand == 0;
+        System.out.println("reverse: " + reverse);
+
+        int row = chooseRow();
+
         rows[row] = true;
         int wordInd = 0;
         int startInd = 0;
@@ -174,66 +251,27 @@ public class Words extends JFrame implements ActionListener {
         endInd = (startInd + word.length()) - 1;
         System.out.println("start ind: " + startInd);
         System.out.println("end ind: " + endInd);
+
+        row = checkRow(word, startInd, endInd, wordInd, row, reverse);
+
         if (!reverse) {
 
-            // } else if (row == 1) {
-            // startInd = (int)(Math.random() * (8-word.length()));
-            // startInd = 4;
-            // endInd = 8;
-            // } else if (row == 2) {
-            // startInd = 8;
-            // endInd = 12;
-            // } else {
-            // startInd = 12;
-            // endInd = 16;
-            // }
-
-            // System.out.println(startInd);
-            // System.out.println(endInd);
-            // endInd = (startInd + 4) - 1;
             for (int i = startInd; i <= endInd; i++) {
                 System.out.println("inside loop");
                 String letter = word.substring(wordInd, wordInd + 1);
                 if (grid2[row][i].equals("1")) {
-                    // String letter = word.substring(wordInd, wordInd + 1);
-                    // grid.put(i, letter);
                     grid2[row][i] = letter;
-                    // JButton button = new JButton(letter);
-                    // button.addActionListener((ActionListener) this);
-                    // button.setFont(myFont);
-                    // button.setFocusable(false);
-                    // buttons[i] = button;
 
                     wordInd++;
                 }
             }
         } else {
-            // if (row == 0) {
-            // startInd = 3;
-            // endInd = 0;
-            // } else if (row == 1) {
-            // startInd = 7;
-            // endInd = 4;
-            // } else if (row == 2) {
-            // startInd = 11;
-            // endInd = 8;
-            // } else {
-            // startInd = 15;
-            // endInd = 12;
-            // }
 
             for (int i = endInd; i >= startInd; i--) {
                 System.out.println("inside loop");
                 String letter = word.substring(wordInd, wordInd + 1);
                 if (grid2[row][i].equals("1")) {
-                    // String letter = word.substring(wordInd, wordInd + 1);
-                    // grid.put(i, letter);
                     grid2[row][i] = letter;
-                    // JButton button = new JButton(letter);
-                    // button.addActionListener((ActionListener) this);
-                    // button.setFont(myFont);
-                    // button.setFocusable(false);
-                    // buttons[i] = button;
 
                     wordInd++;
                 }
@@ -247,21 +285,6 @@ public class Words extends JFrame implements ActionListener {
         }
     }
 
-    // public boolean checkCol(String word, int startInd, int endInd, int wordInd,
-    // int col){
-    // boolean colWorks = true;
-    // for (int i = startInd; i <= endInd; i++) {
-    // System.out.println("checking col");
-    // String letter = word.substring(wordInd, wordInd + 1);
-    // if (grid2[i][col].equals("1") || grid2[i][col].equals(letter)) {
-    // wordInd++;
-    // }else{
-    // colWorks = false;
-    // }
-    // }
-    // return colWorks;
-    // }
-
     public int chooseCol() {
         int col = (int) (Math.random() * 8);
         System.out.println("\ncol: " + col);
@@ -273,24 +296,48 @@ public class Words extends JFrame implements ActionListener {
             col = (int) (Math.random() * 8);
             System.out.println("new col: " + col);
         }
+        cols[col] = true;
         return col;
     }
 
-    public int checkCol(String word, int startInd, int endInd, int wordInd, int col) {
+    public int checkCol(String word, int startInd, int endInd, int wordInd, int col, boolean reverse) {
         boolean colWorks = true;
-        for (int i = startInd; i <= endInd; i++) {
-            System.out.println("checking col");
-            String letter = word.substring(wordInd, wordInd + 1);
-            if (grid2[i][col].equals("1") || grid2[i][col].equals(letter)) {
-                wordInd++;
-            } else {
-                colWorks = false;
+        if (!reverse) {
+            for (int i = startInd; i <= endInd; i++) {
+                System.out.println("checking col");
+                String letter = word.substring(wordInd, wordInd + 1);
+                System.out.println("letter at index: " + grid2[col][i]);
+                System.out.println("Word index: " + wordInd);
+                System.out.println("letter: " + letter);
+                if (grid2[i][col].equals("1") || grid2[i][col].equals(letter)) {
+                    wordInd++;
+                } else {
+                    colWorks = false;
+                }
+                System.out.println("colWorks: " + colWorks);
+            }
+        } else {
+            for (int i = endInd; i >= startInd; i--) {
+                System.out.println("checking col");
+                String letter = word.substring(wordInd, wordInd + 1);
+                System.out.println("letter at index: " + grid2[i][col]);
+                System.out.println("Word index: " + wordInd);
+                System.out.println("letter: " + letter);
+                if (grid2[i][col].equals("1")) {
+                    wordInd++;
+                } else if (grid2[i][col].equals(letter)) {
+                    wordInd += 2;
+                } else {
+                    colWorks = false;
+                }
+                System.out.println("colWorks: " + colWorks);
             }
         }
         while (!colWorks) {
             col = chooseCol();
             wordInd = 0;
-            checkCol(word, startInd, endInd, wordInd, col);
+            colWorks = true;
+            col = checkCol(word, startInd, endInd, wordInd, col, reverse);
         }
         return col;
     }
@@ -315,76 +362,27 @@ public class Words extends JFrame implements ActionListener {
         System.out.println("start ind: " + startInd);
         System.out.println("end ind: " + endInd);
 
-        // for(int i = 0; i < grid2[col].length; i++){
-        // for(int j = 0; j < grid2.length; j++){
-        // if(grid2[j][i].equals("1") || grid2[j][i].equals())
-        // }
-        // }
-
-        col = checkCol(word, startInd, endInd, wordInd, col);
+        col = checkCol(word, startInd, endInd, wordInd, col, reverse);
 
         if (!reverse) {
-
-            // } else if (row == 1) {
-            // startInd = (int)(Math.random() * (8-word.length()));
-            // startInd = 4;
-            // endInd = 8;
-            // } else if (row == 2) {
-            // startInd = 8;
-            // endInd = 12;
-            // } else {
-            // startInd = 12;
-            // endInd = 16;
-            // }
-
-            // System.out.println(startInd);
-            // System.out.println(endInd);
-            // endInd = (startInd + 4) - 1;
 
             for (int i = startInd; i <= endInd; i++) {
                 System.out.println("inside loop");
                 String letter = word.substring(wordInd, wordInd + 1);
                 if (grid2[i][col].equals("1")) {
-                    // String letter = word.substring(wordInd, wordInd + 1);
-                    // grid.put(i, letter);
                     grid2[i][col] = letter;
-                    // JButton button = new JButton(letter);
-                    // button.addActionListener((ActionListener) this);
-                    // button.setFont(myFont);
-                    // button.setFocusable(false);
-                    // buttons[i] = button;
 
                     wordInd++;
                 }
 
             }
         } else {
-            // if (row == 0) {
-            // startInd = 3;
-            // endInd = 0;
-            // } else if (row == 1) {
-            // startInd = 7;
-            // endInd = 4;
-            // } else if (row == 2) {
-            // startInd = 11;
-            // endInd = 8;
-            // } else {
-            // startInd = 15;
-            // endInd = 12;
-            // }
 
             for (int i = endInd; i >= startInd; i--) {
                 System.out.println("inside loop");
                 String letter = word.substring(wordInd, wordInd + 1);
                 if (grid2[i][col].equals("1")) {
-                    // String letter = word.substring(wordInd, wordInd + 1);
-                    // grid.put(i, letter);
                     grid2[i][col] = letter;
-                    // JButton button = new JButton(letter);
-                    // button.addActionListener((ActionListener) this);
-                    // button.setFont(myFont);
-                    // button.setFocusable(false);
-                    // buttons[i] = button;
 
                     wordInd++;
                 }
@@ -399,146 +397,265 @@ public class Words extends JFrame implements ActionListener {
 
     }
 
+    public int checkDiagonal(String word, int diag, int colInd, int wordInd) {
+        boolean diagonalWorks = true;
+        if (diag == 0) {
+            for (int i = 0; i < word.length(); i++) {
+                String letter = word.substring(wordInd, wordInd + 1);
+                if (grid2[i][colInd].equals("1")) {
+                    colInd++;
+                    wordInd++;
+                } else if (grid2[i][colInd].equals(letter)) {
+                    colInd++;
+                    wordInd += 2;
+                } else {
+                    diagonalWorks = false;
+                }
+            }
+        } else if (diag == 1) {
+            colInd = 7;
+            for (int i = 0; i < word.length(); i++) {
+                String letter = word.substring(wordInd, wordInd + 1);
+                if (grid2[i][colInd].equals("1") || grid2[i][colInd].equals(letter)) {
+                    colInd--;
+                    wordInd++;
+                } else if (grid2[i][colInd].equals(letter)) {
+                    colInd--;
+                    wordInd += 2;
+                } else {
+                    diagonalWorks = false;
+                }
+            }
+        } else if (diag == 2) {
+            for (int i = 7; i >= (7 - word.length()) + 1; i--) {
+                String letter = word.substring(wordInd, wordInd + 1);
+                if (grid2[i][colInd].equals("1")) {
+                    colInd++;
+                    wordInd++;
+                } else if (grid2[i][colInd].equals(letter)) {
+                    colInd++;
+                    wordInd += 2;
+                } else {
+                    diagonalWorks = false;
+                }
+            }
+        } else {
+            colInd = 7;
+            for (int i = 7; i >= (7 - word.length()) + 1; i--) {
+                String letter = word.substring(wordInd, wordInd + 1);
+                if (grid2[i][colInd].equals("1")) {
+                    colInd--;
+                    wordInd++;
+                } else if (grid2[i][colInd].equals(letter)) {
+                    colInd--;
+                    wordInd += 2;
+                } else {
+                    diagonalWorks = false;
+                }
+            }
+        }
+        while (!diagonalWorks) {
+            diag = chooseDiagonal();
+            wordInd = 0;
+            colInd = 0;
+            diagonalWorks = true;
+            diag = checkDiagonal(word, diag, colInd, wordInd);
+        }
+        return diag;
+    }
+
+    public int chooseDiagonal() {
+        int randDiag = (int) (Math.random() * 4);
+        while (diagonalsInd[randDiag]) {
+            randDiag = (int) (Math.random() * 4);
+        }
+        diagonalsInd[randDiag] = true;
+        return randDiag;
+    }
+
     public void diagonalOrient(String word) {
+        System.out.println("diagonal orientation");
+        int rand = (int) (Math.random() * 2);
+        System.out.println("rand int - " + rand);
+        boolean reverse = rand == 0;
+        System.out.println("reverse: " + reverse);
+
+        // int diagonal = chooseDiagonal();
+        int diag = chooseDiagonal();
+
+        int colInd = 0;
+        int wordInd = 0;
+
+        diag = checkDiagonal(word, diag, colInd, wordInd);
+
+        if (diag == 0) {
+            for (int i = 0; i < word.length(); i++) {
+                grid2[i][colInd] = word.substring(wordInd, wordInd + 1);
+                colInd++;
+                wordInd++;
+            }
+        } else if (diag == 1) {
+            colInd = 7;
+            for (int i = 0; i < word.length(); i++) {
+                grid2[i][colInd] = word.substring(wordInd, wordInd + 1);
+                colInd--;
+                wordInd++;
+            }
+        } else if (diag == 2) {
+            for (int i = 7; i >= (7 - word.length()) + 1; i--) {
+                grid2[i][colInd] = word.substring(wordInd, wordInd + 1);
+                colInd++;
+                wordInd++;
+            }
+        } else {
+            colInd = 7;
+            for (int i = 7; i >= (7 - word.length()) + 1; i--) {
+                grid2[i][colInd] = word.substring(wordInd, wordInd + 1);
+                colInd--;
+                wordInd++;
+            }
+        }
+
+        for (int i = 0; i < grid2.length; i++) {
+            for (int j = 0; j < grid2[0].length; j++) {
+                System.out.print(grid2[i][j]);
+            }
+            System.out.println();
+        }
 
     }
 
-    // ArrayList<String> usedWords = new ArrayList<String>();
-    // for(Integer i: grid.keySet()){
-    // System.out.println("key - " + i);
-    // System.out.println("value -" + grid.get(i));
-    // }
-
-    // while(grid.keySet().size() < 16){
-    // System.out.println("keysize -" + grid.keySet().size());
-    // int randWordInd = (int)(Math.random() * words.length);
-    // String word = words[randWordInd];
-
-    // if(!(usedWords.contains(word))){
-    // usedWords.add(word);
-    // }
-    // grid.put(randWordInd, word);
-    // System.out.println("grid size- " + grid.keySet().size());
-    // horizontalOrient(word);
-    // int randOrientation = (int)(Math.random() * 3);
-    // if(randOrientation == 0){
-    // horizontalOrient(word);
-    // }else if(randOrientation == 1){
-    // verticalOrient(word);
-    // }else{
-    // diagonalOrient(word);
-    // }
-    // }
-
-    // for (int i = 0; i < 16; i++) {
-    // int randWordInd = (int)(Math.random() * words.length);
-    // String word = words[randWordInd];
-
-    // String word = "";
-    // //choose random starting position on the grid
-    // int randStart = (int)(Math.random() * 16);
-    // System.out.println("rand int - " + randStart);
-    // //if the grid doesn't already have a letter at that position,
-    // if(!(grid.keySet().contains(randStart))){
-    // int randWordInd = (int)(Math.random() * words.length);
-    // word = words[randWordInd];
-    // // if(word.equals(grid.get(randWordInd))){
-    // // word = words[randWordInd];
-    // // }
-    // while(grid.values().contains(word)){
-    // randWordInd = (int)(Math.random() * words.length);
-    // word = words[randWordInd];
-    // }
-    // int randOrientation = (int)(Math.random() * 3);
-    // if(randOrientation == 0){
-    // horizontalOrient();
-    // }else if(randOrientation == 1){
-    // verticalOrient();
-    // }else{
-    // diagonalOrient();
-    // }
-    // System.out.println(grid);
-
-    // grid.put(randStart, word);
-    // buttons[i] = new JButton(word);
-    // buttons[i].addActionListener((ActionListener) this);
-    // buttons[i].setFont(myFont);
-    // buttons[i].setFocusable(false);
-    // }
+    // public void paint(Graphics g) {
+    // super.paint(g);
+    // g.drawRect(80, 650, 500, 125);
+    // g.setColor(Color.white);
+    // g.fillRect(80, 650, 500, 125);
 
     // }
 
-    public void paint(Graphics g) {
-        super.paint(g);
-        g.drawRect(80, 650, 500, 125);
-        g.setColor(Color.white);
-        g.fillRect(80, 650, 500, 125);
+    // public void createGrid() {
+    // int start = (int) (Math.random() * 16);
 
+    // }
+
+    public boolean checkLose() {
+        return false;
     }
 
-    public void createGrid() {
-        int start = (int) (Math.random() * 16);
-
+    public void reset() {
+        timer.stop();
+        ttlHrs += hours;
+        ttlMins += minutes;
+        tltSecs += seconds;
+        elapsedTime = 0;
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        seconds_string = String.format("%02d", seconds);
+        minutes_string = String.format("%02d", minutes);
+        hours_string = String.format("%02d", hours);
+        timeLabel.setText(hours_string + ":" + minutes_string + ":" + seconds_string);
     }
 
-    // public void horizontalOrient(String word){
-    // boolean reverse = false;
-    // int rand = (int)(Math.random() * 2);
-    // if(rand == 0){
-    // reverse = true;
-    // }
-    // int randRow = (int)(Math.random() * 4) + 1;
-    // //System.out.println("row - " + randRow);
-    // int max = 4 * randRow - 1;
-    // int min = 4 * (randRow - 1);
-    // //System.out.println("min - " + min);
-    // //System.out.println("max - " + max);
-    // if(!reverse){
-    // int strInd = 0;
+    public void endScreen() {
+        dispose();
+        JFrame frame2 = new JFrame();
+        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.setSize(500, 550);
+        frame2.setLayout(null);
+        frame2.setForeground(Color.white);
+        frame2.setTitle("Brain Games");
 
-    // for(int i = min; i < (min + word.length()); i++){
-    // buttons[i] = new JButton(word.substring(strInd, strInd + 1));
-    // buttons[i].addActionListener((ActionListener) this);
-    // buttons[i].setFont(myFont);
-    // buttons[i].setFocusable(false);
-    // strInd++;
-    // }
-    // }else{
-    // int strInd = word.length() - 1;
-    // System.out.println("word -" + word);
-    // System.out.println("min - " + min);
-    // for(int i = min; i < (min + word.length()); i++){
-    // //System.out.println("str ind- " + strInd);
-    // System.out.println(i);
-    // buttons[i] = new JButton(word.substring(strInd, strInd + 1));
-    // buttons[i].addActionListener((ActionListener) this);
-    // buttons[i].setFont(myFont);
-    // buttons[i].setFocusable(false);
-    // strInd--;
-    // }
-    // }
+        JLabel title2 = new JLabel("Game Over");
+        title2.setFont(titleFont);
+        title2.setBounds(80, 25, 500, 100);
+        title2.setForeground(Color.red);
 
-    // }
+        if (checkLose()) {
+            JLabel outOfTime = new JLabel("(Ran out of time)");
+            title2.setFont(titleFont);
+            title2.setBounds(350, 25, 500, 100);
+        }
 
-    // public void verticalOrient(String word){}
+        JLabel scorelbl2 = new JLabel("Score: " + String.valueOf(score));
+        scorelbl2.setFont(myFont);
+        scorelbl2.setBounds(80, 100, 500, 100);
 
-    // public void diagonalOrient(String word){}
+        seconds_string = String.format("%02d", tltSecs);
+        minutes_string = String.format("%02d", ttlMins);
+        hours_string = String.format("%02d", ttlHrs);
+        JLabel timeLabel2 = new JLabel("Time: " + hours_string + ":" + minutes_string + ":" + seconds_string);
+        timeLabel2.setFont(myFont);
+        timeLabel2.setBounds(80, 175, 500, 100);
 
-    // public void paintComponent(Graphics g){
-    // paintComponents(g);
-    // Graphics2D g2d = (Graphics2D) g;
+        int totalTime = (ttlHrs * 3600) + (ttlMins * 60) + tltSecs;
+        double vel = (double) totalTime / score;
+        System.out.println("" + ttlHrs + ttlMins + tltSecs);
+        System.out.println(vel);
 
-    // g2d.setColor(Color.gray);
-    // g2d.drawRect(50,50,300,100);
+        JLabel velLbl = new JLabel("Rate: " + String.valueOf(vel) + " \nsecs/correct answer");
+        velLbl.setFont(new Font("Ink Free", Font.BOLD, 22));
+        velLbl.setBounds(80, 250, 500, 80);
 
-    // // g.setColor(Color.RED);
-    // // g.fillRect(50,50,300,100);
-    // }
+        if (vel > bestVel) {
+            bestVel = vel;
+            JLabel newVel = new JLabel("New rate!");
+            newVel.setFont(new Font("Ink Free", Font.BOLD, 30));
+            newVel.setBounds(300, 100, 500, 100);
+            newVel.setForeground(Color.blue);
+            frame2.add(newVel);
+        }
+
+        JLabel bestVelLbl = new JLabel("Best Rate: " + String.valueOf(bestVel) + " \nsecs/correct answer");
+        bestVelLbl.setFont(new Font("Ink Free", Font.BOLD, 22));
+        bestVelLbl.setBounds(80, 300, 500, 100);
+
+        back2 = new JButton("Back");
+        back2.addActionListener(this);
+        // Font tinyFont = new Font("Ink Free", Font.BOLD, 15);
+        back2.setFont(myFont);
+        back2.setFocusable(false);
+        back2.setBounds(175, 400, 100, 50);
+
+        frame2.add(title2);
+        frame2.add(scorelbl2);
+        frame2.add(velLbl);
+        frame2.add(bestVelLbl);
+        frame2.add(timeLabel2);
+        frame2.add(back2);
+        frame2.setVisible(true);
+    }
+
+    public void updateScore() {
+        score++;
+        scorelbl.setText("Score: " + score);
+        add(scorelbl);
+        if (score == 5) {
+            timer.stop();
+            reset();
+            endScreen();
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == back) {
+        if (e.getSource() == back || e.getSource() == back2) {
+            dispose();
             Options options = new Options();
+        }
+
+        for (int i = 0; i < buttons.length; i++) {
+            if (e.getSource() == buttons[i]) {
+                buttons[i].setBackground(Color.red);
+                word += buttons[i].getText();
+                if (words.contains(word)) {
+                    updateScore();
+                    JLabel wordlbl = new JLabel(word);
+                    wordlbl.setFont(myFont);
+                    wordsPanel.add(wordlbl);
+                    word = "";
+                }
+            }
         }
 
     }

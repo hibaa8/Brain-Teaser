@@ -21,19 +21,19 @@ public class Options implements ActionListener {
         title.setBounds(125, 50, 400, 75);
         title.setForeground(Color.red);
 
-        math = new JButton("Math Game");
+        math = new JButton("Math");
         math.addActionListener(this);
         math.setFont(myFont);
         math.setFocusable(false);
         math.setBounds(150, 150, 250, 80);
 
-        memory = new JButton("Memory Game");
+        memory = new JButton("Memory");
         memory.addActionListener(this);
         memory.setFont(myFont);
         memory.setFocusable(false);
         memory.setBounds(150, 300, 250, 80);
 
-        words = new JButton("Words");
+        words = new JButton("Word");
         words.addActionListener(this);
         words.setFont(myFont);
         words.setFocusable(false);

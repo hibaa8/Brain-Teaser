@@ -249,42 +249,7 @@ public class Memory implements ActionListener {
                 // add to selected, turn the card, calculate time, print stuff out
                 selected.add(cards.get(i));
                 buttons[i].setIcon(new ImageIcon(getClass().getResource(cards.get(i))));
-                // if (initialSec == 0) {
-                // initialSec = (hours * 3600) + (minutes * 60) + seconds;
-                // }
 
-                // System.out.println(selected);
-                // System.out.println("Card: " + cards.get(i));
-                // System.out.println("Score: " + score);
-                // System.out.println(cards.get(i).equals(selected.get(0)));
-
-                // int currentTime = (hours * 3600) + (minutes * 60) + seconds;
-                // boolean match = false;
-                // if (initialSec != 0 && currentTime < initialSec) {
-                // if ((selected.size() == 2) && selected.get(0).equals(cards.get(i))) {
-                // System.out.println("update score");
-                // updateScore();
-                // match = true;
-                // }
-                // }
-                // if (!match) {
-                // for (int j : cards.keySet()) {
-                // if (cards.get(j).equals(selected.get(0)) ||
-                // cards.get(j).equals(selected.get(1))) {
-                // currentTime = (hours * 3600) + (minutes * 60) + seconds;
-                // // try {
-                // // Thread.sleep(2000);
-                // // } catch (InterruptedException e1) {
-                // // // TODO Auto-generated catch block
-                // // e1.printStackTrace();
-                // // }
-                // buttons[i].setIcon(new
-                // ImageIcon(getClass().getResource("cards/card_backside.png")));
-                // // panel.add(buttons[i]);
-                // // frame.add(panel);
-                // System.out.println(cards.get(j));
-                // }
-                // }
             }
 
             // if ((selected.size() == 1) && selected.get(0).equals(cards.get(i))) {

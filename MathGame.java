@@ -6,10 +6,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.Math;
 import java.util.HashMap;
+import java.util.logging.Formatter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class MathGame implements ActionListener {
+public class MathGame implements ActionListener, KeyListener {
     private JFrame frame;
     private JPanel numsPanel;
     private JPanel operPanel;
@@ -43,14 +44,20 @@ public class MathGame implements ActionListener {
 
     public MathGame() {
         frame = new JFrame("Brain Games");
+        // frame.getContentPane().setBackground(Color.gray);
+        frame.setTitle("Brain Games");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(700, 700);
+        frame.setSize(650, 650);
         frame.setLayout(null);
-        frame.setBackground(Color.white);
+        // setBackground(Color.white);
+
+        frame.addKeyListener(this);
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
 
         title = new JLabel("Long addition/subtraction");
         title.setFont(titleFont);
-        title.setBounds(70, 70, 500, 125);
+        title.setBounds(90, 70, 500, 125);
         title.setForeground(Color.red);
 
         // for (int i = 0; i < 10; i++) {
@@ -76,7 +83,7 @@ public class MathGame implements ActionListener {
 
         question = 0;
         questionlbl = new JLabel(questions.keySet().stream().findFirst().get());
-        questionlbl.setFont(myFont);
+        questionlbl.setFont(new Font("Ink Free", Font.BOLD, 32));
         questionlbl.setBounds(250, 170, 400, 75);
 
         back = new JButton("Back");
@@ -92,7 +99,7 @@ public class MathGame implements ActionListener {
 
         scorelbl = new JLabel("Score: " + score);
         scorelbl.setFont(myFont);
-        scorelbl.setBounds(360, 15, 200, 75);
+        scorelbl.setBounds(320, 15, 200, 75);
 
         timeLabel.setText(hours_string + ":" + minutes_string + ":" + seconds_string);
         timeLabel.setFont(myFont);
@@ -101,7 +108,7 @@ public class MathGame implements ActionListener {
         timer.start();
 
         textfield = new JTextField();
-        textfield.setBounds(100, 250, 400, 50);
+        textfield.setBounds(75, 260, 500, 50);
         textfield.setFont(myFont);
 
         for (int n = 0; n < 10; n++) {
@@ -127,14 +134,14 @@ public class MathGame implements ActionListener {
         clrButton.setFocusable(false);
 
         numsPanel = new JPanel();
-        numsPanel.setBounds(50, 400, 500, 200);
+        numsPanel.setBounds(95, 410, 350, 150);
         numsPanel.setLayout(new GridLayout(2, 5, 5, 5));
         for (int j = 0; j < 10; j++) {
             numsPanel.add(numButtons[j]);
         }
 
         operPanel = new JPanel();
-        operPanel.setBounds(555, 400, 100, 200);
+        operPanel.setBounds(450, 410, 100, 150);
         operPanel.setLayout(new GridLayout(3, 1, 5, 5));
 
         operPanel.add(delButton);
@@ -145,7 +152,22 @@ public class MathGame implements ActionListener {
         enterButton.addActionListener(this);
         enterButton.setFont(myFont);
         enterButton.setFocusable(false);
-        enterButton.setBounds(250, 310, 100, 75);
+        enterButton.setBounds(260, 340, 100, 40);
+
+        // frame.addKeyListener(new KeyListener() {
+
+        // @Override
+        // public void keyTyped(KeyEvent e) {
+        // // TODO Auto-generated method stub
+
+        // }
+
+        // @Override
+        // public void keyReleased(KeyEvent e) {
+        // // TODO Auto-generated method stub
+
+        // }
+        // });
 
         frame.add(title);
         frame.add(questionlbl);
@@ -173,6 +195,29 @@ public class MathGame implements ActionListener {
             timeLabel.setText(hours_string + ":" + minutes_string + ":" + seconds_string);
         }
     });
+
+    // public void keyPressed(KeyEvent e) {
+    // System.out.println("key pressed");
+    // if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+    // question++;
+    // System.out.println(textfield.getText());
+    // System.out.println("Question: " + question);
+    // System.out.println("correct answer = " +
+    // questions.get(questionlbl.getText()));
+    // System.out.println("inputted answer = " + textfield.getText());
+
+    // if (questions.get(questionlbl.getText()) ==
+    // Integer.valueOf(textfield.getText())) {
+    // score++;
+    // }
+    // System.out.println("Score: " + score);
+    // if (question <= 9) {
+    // newQuestion();
+    // } else {
+    // endScreen();
+    // }
+    // }
+    // }
 
     public void reset() {
         timer.stop();
@@ -265,25 +310,27 @@ public class MathGame implements ActionListener {
         frame2.setVisible(true);
     }
 
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            question++;
-            System.out.println(textfield.getText());
-            System.out.println("Question: " + question);
-            System.out.println("correct answer = " + questions.get(questionlbl.getText()));
-            System.out.println("inputted answer = " + textfield.getText());
+    // public void keyPressed(KeyEvent e) {
+    // if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+    // question++;
+    // System.out.println(textfield.getText());
+    // System.out.println("Question: " + question);
+    // System.out.println("correct answer = " +
+    // questions.get(questionlbl.getText()));
+    // System.out.println("inputted answer = " + textfield.getText());
 
-            if (questions.get(questionlbl.getText()) == Integer.valueOf(textfield.getText())) {
-                score++;
-            }
-            System.out.println("Score: " + score);
-            if (question <= 9) {
-                newQuestion();
-            } else {
-                endScreen();
-            }
-        }
-    }
+    // if (questions.get(questionlbl.getText()) ==
+    // Integer.valueOf(textfield.getText())) {
+    // score++;
+    // }
+    // System.out.println("Score: " + score);
+    // if (question <= 9) {
+    // newQuestion();
+    // } else {
+    // endScreen();
+    // }
+    // }
+    // }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -340,6 +387,42 @@ public class MathGame implements ActionListener {
 
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+        System.out.println("key pressed");
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            question++;
+            System.out.println(textfield.getText());
+            System.out.println("Question: " + question);
+            System.out.println("correct answer = " + questions.get(questionlbl.getText()));
+            System.out.println("inputted answer = " + textfield.getText());
+
+            if (questions.get(questionlbl.getText()) == Integer.valueOf(textfield.getText())) {
+                score++;
+            }
+            System.out.println("Score: " + score);
+            if (question <= 9) {
+                newQuestion();
+            } else {
+                endScreen();
+            }
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
     // @Override
     // public void keyPressed(KeyEvent e) {
     // if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -352,4 +435,5 @@ public class MathGame implements ActionListener {
     // }
     // }
     // }
+
 }

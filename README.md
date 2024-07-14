@@ -5,4 +5,5 @@ Java GUI application with three games on:
 - cross word puzzles
   
 Each game tracks score and has a time limit for completion.
+
 To start, clone this repo and run Main.java under src/.
